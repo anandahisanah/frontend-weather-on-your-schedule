@@ -1,14 +1,27 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import tw from 'twrnc';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CreateEventScreen from './app/screens/CreateEventScreen';
+import DetailScreen from './app/screens/DetailScreen';
+import HomeScreen from './app/screens/HomeScreen';
+import SplashScreen from './app/screens/SplashScreen';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+function App() {
   return (
-    <View style={tw`flex-1 justify-center items-center bg-blue-500`}>
-      <Text style={tw`text-white text-2xl font-bold`}>
-        Hello, world!
-      </Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Detail" component={DetailScreen} />
+        <Stack.Screen name="CreateEvent" component={CreateEventScreen} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
+export default App;
