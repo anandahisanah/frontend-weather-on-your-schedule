@@ -11,7 +11,7 @@ function HomeScreen({ navigation }) {
         <ScrollView>
             <SafeAreaView style={tw`flex-1`}>
                 {/* top */}
-                <View>
+                <View style={tw`mb-3`}>
                     <ImageBackground
                         source={require('../assets/white-cloud.jpg')}
                         style={tw`items-center py-5`}
@@ -34,16 +34,16 @@ function HomeScreen({ navigation }) {
                 </View>
 
                 {/* today weather */}
-                <View style={tw`w-full px-5 mt-3`}>
+                <View style={tw`w-full px-5 mb-3`}>
                     <View style={tw`flex-row mb-3`}>
                         <View style={tw`flex-1`}>
-                            <Text style={tw`font-semibold`}>Today</Text>
+                            <Text style={tw`text-lg font-semibold`}>Today</Text>
                         </View>
-                        <View style={tw`flex-1 items-end`}>
+                        <View style={tw`flex-1 justify-center items-end`}>
                             <Text style={tw`text-slate-500 underline`}>See More</Text>
                         </View>
                     </View>
-                    <View style={tw`flex-row mb-3`}>
+                    <View style={tw`flex-row`}>
                         {todayWeathers.map((_, index) => (
                             <View style={tw`flex-1 items-center mx-2`} key={index}>
                                 <Text style={tw`font-medium text-slate-500`}>14:10</Text>
@@ -59,12 +59,12 @@ function HomeScreen({ navigation }) {
                 </View>
 
                 {/* your event */}
-                <View style={tw`w-full px-5 mt-3`}>
+                <View style={tw`w-full px-5`}>
                     <View style={tw`flex-row mb-3`}>
                         <View style={tw`flex-1`}>
-                            <Text style={tw`font-semibold`}>Your Event</Text>
+                            <Text style={tw`text-lg font-semibold`}>Your Event</Text>
                         </View>
-                        <View style={tw`flex-1 items-end`}>
+                        <View style={tw`flex-1 justify-center items-end`}>
                             <Text style={tw`text-slate-500 underline`}>See More</Text>
                         </View>
                     </View>
@@ -82,7 +82,7 @@ function HomeScreen({ navigation }) {
                 </View>
 
                 {/* <View style={tw`flex-1 items-center bg-white`}>
-                    <View style={tw`bg-gradient-to-r from-bg-sky-500 to-bg-indigo-500`}>
+                    <View style={tw``}>
 
                         <TouchableOpacity
                             style={tw`bg-orange-500 py-2 px-4 rounded`}
