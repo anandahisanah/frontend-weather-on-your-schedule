@@ -5,6 +5,7 @@ import CreateEventScreen from './app/screens/CreateEventScreen';
 import DetailScreen from './app/screens/DetailScreen';
 import HomeScreen from './app/screens/HomeScreen';
 import SplashScreen from './app/screens/SplashScreen';
+import TodayScreen from './app/screens/TodayScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ function App() {
           component={SplashScreen}
           options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Today" component={TodayScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Detail" component={DetailScreen} />
         <Stack.Screen name="CreateEvent" component={CreateEventScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
