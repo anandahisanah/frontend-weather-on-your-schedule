@@ -64,7 +64,7 @@ function HomeScreen({ navigation }) {
                         <Text style={tw`text-lg font-semibold`}>Your Event</Text>
                     </View>
                     <View style={tw`flex-1 justify-center items-end`}>
-                        <Text style={tw`text-slate-500 underline`}>See More</Text>
+                        <Text style={tw`text-slate-500 underline`} onPress={() => navigation.navigate('Event')}>See More</Text>
                     </View>
                 </View>
                 {yourEvents.map((_, index) => (

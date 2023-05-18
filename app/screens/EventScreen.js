@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import tw from 'twrnc';
 import { Header } from 'react-native-elements';
 
-const TodayScreen = ({ navigation }) => {
+const EventScreen = ({ navigation }) => {
     const times = Array(6).fill(null);
 
     return (
@@ -12,7 +12,7 @@ const TodayScreen = ({ navigation }) => {
             <Header
                 backgroundColor={'#fff'}
                 centerComponent={{
-                    text: 'Weather in Balikpapan',
+                    text: 'Event',
                     style: { color: '#000', fontWeight: 'bold', fontSize: 18 },
                 }}
                 leftComponent={
@@ -32,10 +32,7 @@ const TodayScreen = ({ navigation }) => {
                                 <Text style={tw`font-medium`}>10:00</Text>
                                 <Image source={require('../assets/icon-sun.png')} style={tw`mx-3 w-8 h-8`} />
                                 <Text style={tw`mr-3 font-medium text-center`}>30°</Text>
-                                <Image source={require('../assets/icon-drip.png')} style={tw`mx-3 w-8 h-8`} />
-                                <Text style={tw`mr-3 font-medium text-center`}>70%</Text>
-                                <Image source={require('../assets/icon-uv.png')} style={tw`mx-3 w-8 h-8`} />
-                                <Text style={tw`mr-3 font-medium text-center`}>High</Text>
+                                <Text style={tw`mr-3 font-medium text-center`}>Meeting With Client</Text>
                             </View>
                         ))}
                         <Text style={tw`font-medium text-base m-5 text-center`}>Tuesday, 25 Apr 2023</Text>
@@ -45,10 +42,7 @@ const TodayScreen = ({ navigation }) => {
                                 <Text style={tw`font-medium`}>10:00</Text>
                                 <Image source={require('../assets/icon-sun.png')} style={tw`mx-3 w-8 h-8`} />
                                 <Text style={tw`mr-3 font-medium text-center`}>30°</Text>
-                                <Image source={require('../assets/icon-drip.png')} style={tw`mx-3 w-8 h-8`} />
-                                <Text style={tw`mr-3 font-medium text-center`}>70%</Text>
-                                <Image source={require('../assets/icon-uv.png')} style={tw`mx-3 w-8 h-8`} />
-                                <Text style={tw`mr-3 font-medium text-center`}>High</Text>
+                                <Text style={tw`mr-3 font-medium text-center`}>Meeting With Client</Text>
                             </View>
                         ))}
                         <Text style={tw`font-medium text-base m-5 text-center`}>Wednesday, 26 Apr 2023</Text>
@@ -58,10 +52,7 @@ const TodayScreen = ({ navigation }) => {
                                 <Text style={tw`font-medium`}>10:00</Text>
                                 <Image source={require('../assets/icon-sun.png')} style={tw`mx-3 w-8 h-8`} />
                                 <Text style={tw`mr-3 font-medium text-center`}>30°</Text>
-                                <Image source={require('../assets/icon-drip.png')} style={tw`mx-3 w-8 h-8`} />
-                                <Text style={tw`mr-3 font-medium text-center`}>70%</Text>
-                                <Image source={require('../assets/icon-uv.png')} style={tw`mx-3 w-8 h-8`} />
-                                <Text style={tw`mr-3 font-medium text-center`}>High</Text>
+                                <Text style={tw`mr-3 font-medium text-center`}>Meeting With Client</Text>
                             </View>
                         ))}
                     </View>
@@ -71,4 +62,4 @@ const TodayScreen = ({ navigation }) => {
     );
 };
 
-export default TodayScreen;
+export default EventScreen;
