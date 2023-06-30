@@ -5,19 +5,6 @@ import tw from 'twrnc';
 import axios from 'axios';
 import { SelectList } from 'react-native-dropdown-select-list';
 
-const useBackButtonHandler = (handler) => {
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      handler();
-      return true;
-    });
-
-    return () => {
-      backHandler.remove();
-    };
-  }, [handler]);
-};
-
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
@@ -98,27 +85,15 @@ const RegisterScreen = () => {
       password: password.value,
       name: name.value,
     };
-    console.log(userData)
-    // axios.post('http://localhost:8080/user', userData)
     axios.post('https://backend-weather-on-your-schedule-production.up.railway.app/user', userData)
       .then(response => {
-        setModalVisible(true);
-        setModalMessage('Success creating account!');
-        console.log(response.data);
+        console.log(response);
+        navigation.navigate('Login', { province_name: selectedProvince, city_name: selectedCity });
       })
       .catch(error => {
-        setModalVisible(true);
-        setModalMessage('Failed creating account!');
         console.error(error);
       });
   };
-
-  useBackButtonHandler(() => {
-    // Handle back button press
-    // For example, navigate back to the previous screen
-    navigation.goBack();
-    return true;
-  });
 
   return (
     <View style={tw`flex-1 justify-center items-center bg-white`}>
@@ -204,7 +179,7 @@ const RegisterScreen = () => {
         <Modal visible={modalVisible} animationType="fade">
           <View style={tw`flex-1 justify-center items-center bg-white`}>
             <Text>{modalMessage}</Text>
-            <TouchableOpacity style={tw`bg-orange-500 py-2 px-4 rounded`} onPress={() => setModalVisible(false)}>
+            <TouchableOpacity style={tw`bg-orange-500 mt-3 py-2 px-4 rounded`} onPress={() => setModalVisible(false)}>
               <Text style={tw`text-center font-medium`}>OK</Text>
             </TouchableOpacity>
           </View>
