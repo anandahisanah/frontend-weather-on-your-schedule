@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import tw from 'twrnc';
+import axios from 'axios';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState({
@@ -13,8 +14,16 @@ const LoginScreen = ({ navigation }) => {
     alias: "Password",
   });
 
-  const handleSave = () => {
-    console.log('Title:', title.value);
+  // login
+  const handleLogin = () => {
+    axios.get(`https://backend-weather-on-your-schedule-production.up.railway.app/user/login?username=${username.value}&password=${password.value}`)
+      .then(response => {
+        console.log(response);
+        navigation.navigate('Home', { username: username.value });
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   return (
@@ -46,13 +55,14 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={(text) => setPassword({ value: text, alias: password.alias })}
                 value={password.value}
                 placeholder={password.alias}
+                secureTextEntry
               />
             </View>
           </View>
           {/* create button */}
           <TouchableOpacity
             style={tw`bg-orange-500 py-2 px-4 rounded`}
-            onPress={handleSave}
+            onPress={handleLogin}
           >
             <Text style={tw`text-center font-medium`}>Login</Text>
           </TouchableOpacity>
