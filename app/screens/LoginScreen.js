@@ -21,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
     <View style={tw`flex-1 justify-center items-center bg-white`}>
       <View style={tw`bg-white justify-center items-center p-5 rounded`}>
         <Text style={tw`text-xl font-bold mb-1`}>Sign In</Text>
-        <Text style={tw`text-base font-normal mb-5`}>You need to login to continue</Text>
+        <Text style={tw`text-base font-normal mb-5`}>You need login to continue</Text>
         <Image source={require('../assets/weather-icon/1-cerah-berawan.png')} style={tw`w-12 h-12`} />
 
         <View style={tw`w-100 mt-5 px-5`}>
