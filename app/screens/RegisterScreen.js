@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, BackHandler } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, BackHandler, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import tw from 'twrnc';
+import axios from 'axios';
+import { SelectList } from 'react-native-dropdown-select-list';
 
 const useBackButtonHandler = (handler) => {
   useEffect(() => {
@@ -16,7 +18,7 @@ const useBackButtonHandler = (handler) => {
   }, [handler]);
 };
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
   const navigation = useNavigation();
 
   const [name, setName] = useState({
@@ -34,17 +36,81 @@ const LoginScreen = () => {
     alias: 'Password',
   });
 
-  const [province, setProvince] = useState({
-    value: null,
-    alias: 'Province',
-  });
+  // select province and city
+  const [selectedProvince, setSelectedProvince] = React.useState("");
+  const [provinces, setProvinces] = React.useState([]);
+  const [selectedCity, setSelectedCity] = React.useState("");
+  const [cities, setCities] = React.useState([]);
 
-  const [city, setCity] = useState({
-    value: null,
-    alias: 'City',
-  });
+  const getProvinces = () => {
+    axios.get('https://backend-weather-on-your-schedule-production.up.railway.app/province')
+      .then(response => {
+        const updatedProvinces = response.data.data.map(province => ({
+          key: province.id.toString(),
+          value: province.name
+        }));
+        setProvinces(updatedProvinces);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
+  const getCities = () => {
+    if (selectedProvince !== "") {
+      axios.get(`https://backend-weather-on-your-schedule-production.up.railway.app/city?name=${selectedProvince}`)
+        .then(response => {
+          const updatedCities = response.data.data.map(city => ({
+            key: city.id.toString(),
+            value: city.name
+          }));
+          setCities(updatedCities);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  };
+
+  React.useEffect(() => {
+    console.log(selectedProvince)
+    if (selectedProvince !== "") {
+      getCities(selectedProvince);
+    }
+  }, [selectedProvince]);
+
+  React.useEffect(() => {
+    if (provinces.length === 0) {
+      getProvinces();
+    }
+  }, []);
+
+  // modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
+  // save
   const handleSave = () => {
+    const userData = {
+      province_name: selectedProvince,
+      city_name: selectedCity,
+      username: username.value,
+      password: password.value,
+      name: name.value,
+    };
+    console.log(userData)
+    // axios.post('http://localhost:8080/user', userData)
+    axios.post('https://backend-weather-on-your-schedule-production.up.railway.app/user', userData)
+      .then(response => {
+        setModalVisible(true);
+        setModalMessage('Success creating account!');
+        console.log(response.data);
+      })
+      .catch(error => {
+        setModalVisible(true);
+        setModalMessage('Failed creating account!');
+        console.error(error);
+      });
   };
 
   useBackButtonHandler(() => {
@@ -101,25 +167,23 @@ const LoginScreen = () => {
           </View>
           {/* province */}
           <View style={tw`mb-3`}>
-            <Text style={tw`text-gray-700 font-medium mb-2`}>{province.alias}</Text>
+            <Text style={tw`text-gray-700 font-medium mb-2`}>Province</Text>
             <View>
-              <TextInput
-                style={tw`rounded-md border border-gray-400 p-2`}
-                onChangeText={(text) => setProvince({ value: text, alias: province.alias })}
-                value={province.value}
-                placeholder={province.alias}
+              <SelectList
+                setSelected={setSelectedProvince}
+                data={provinces}
+                save="value"
               />
             </View>
           </View>
           {/* city */}
           <View style={tw`mb-3`}>
-            <Text style={tw`text-gray-700 font-medium mb-2`}>{city.alias}</Text>
+            <Text style={tw`text-gray-700 font-medium mb-2`}>City</Text>
             <View>
-              <TextInput
-                style={tw`rounded-md border border-gray-400 p-2`}
-                onChangeText={(text) => setCity({ value: text, alias: city.alias })}
-                value={city.value}
-                placeholder={city.alias}
+              <SelectList
+                setSelected={setSelectedCity}
+                data={cities}
+                save="value"
               />
             </View>
           </View>
@@ -135,9 +199,19 @@ const LoginScreen = () => {
             <Text style={tw`text-orange-500 font-medium`}> Login here!</Text>
           </Text>
         </TouchableOpacity>
+
+        {/* Modal */}
+        <Modal visible={modalVisible} animationType="fade">
+          <View style={tw`flex-1 justify-center items-center bg-white`}>
+            <Text>{modalMessage}</Text>
+            <TouchableOpacity style={tw`bg-orange-500 py-2 px-4 rounded`} onPress={() => setModalVisible(false)}>
+              <Text style={tw`text-center font-medium`}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View>
     </View>
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
