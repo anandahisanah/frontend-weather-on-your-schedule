@@ -77,7 +77,6 @@ const CreateEventScreen = ({ navigation, route }) => {
     const getForecast = () => {
         axios.get(`https://backend-weather-on-your-schedule-production.up.railway.app/forecast/find-by-datetime?username=${username}&date=${getFormattedDate(date)}&time=${getFormattedTime(time)}`)
             .then(response => {
-                console.log(response.data);
                 const data = response.data.data;
 
                 // Mengupdate state dengan data dari respons
@@ -137,8 +136,45 @@ const CreateEventScreen = ({ navigation, route }) => {
         }
     }, [date, time]);
 
+    const generateDateToSave = (date) => {
+        return date.toISOString().slice(0, 10); // Mengambil substring dari string ISO untuk mendapatkan format tanggal "yyyy-mm-dd"
+    };
+
+    const generateTimeToSave = (time) => {
+        return time.toISOString().slice(11, 16); // Mengambil substring dari string ISO untuk mendapatkan format waktu "HH:mm"
+    };
+
+    // save
     const handleSave = () => {
-        console.log('Title:', title.value);
+        const data = {
+            user_username: username,
+            datetime: generateDateToSave(date) + ' ' + generateTimeToSave(time) + ':00',
+            title: title.value,
+            description: description.value,
+        };
+        console.log(data)
+        axios.post('https://backend-weather-on-your-schedule-production.up.railway.app/event', data)
+            .then(response => {
+                console.log(response.data);
+                // navigation.navigate('Home', { username: username });
+            })
+            .catch(error => {
+                console.error(error);
+
+                if (error.response) {
+                    // Respons diterima tetapi status tidak berhasil
+                    console.log(error.response.data.message);
+                    // Memunculkan pesan error yang diterima dari server
+                } else if (error.request) {
+                    // Respons tidak diterima
+                    console.log("Failed to receive response from the server.");
+                    // Memunculkan pesan kesalahan ketika tidak ada respons dari server
+                } else {
+                    // Kesalahan lainnya
+                    console.log("An error occurred during the request.");
+                    // Memunculkan pesan kesalahan ketika terjadi kesalahan lainnya
+                }
+            });
     };
 
     return (
@@ -200,7 +236,6 @@ const CreateEventScreen = ({ navigation, route }) => {
                                 </View>
                             </Modal>
                         </View>
-
                         {/* time */}
                         <View style={tw`flex-1 pr-2`}>
                             <Text style={tw`text-gray-700 font-medium mb-2`}>Time</Text>
