@@ -1,38 +1,141 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, Button, Platform, Modal } from 'react-native';
 import tw from 'twrnc';
 import { Header } from 'react-native-elements';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from 'axios';
 
-const CreateEventScreen = ({ navigation }) => {
+const CreateEventScreen = ({ navigation, route }) => {
+    const { username } = route.params;
+
     const [title, setTitle] = useState({
         value: null,
         alias: "Title",
     });
 
-    const [date, setDate] = useState({
+    const [weather, setWeather] = useState({
         value: null,
-        alias: "Date",
+        alias: "Weather",
     });
 
-    const [time, setTime] = useState({
+    const [humidity, setHumidity] = useState({
         value: null,
-        alias: "Time",
+        alias: "Humidity",
     });
 
-    const [weatherForecast, setWeatherForecast] = useState({
+    const [windSpeed, setWindSpeed] = useState({
         value: null,
-        alias: "Weather Forecast",
+        alias: "Wind Speed",
     });
 
-    const [chanceOfRaining, setChanceOfRaining] = useState({
+    const [temperature, setTemperature] = useState({
         value: null,
-        alias: "Chance Of Raining",
+        alias: "Temperature",
     });
 
     const [description, setDescription] = useState({
         value: null,
         alias: "Description",
     });
+
+    // date
+    const [date, setDate] = useState(new Date());
+    const [showPickerDate, setShowPickerDate] = useState(false);
+
+    const onChangeDate = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShowPickerDate(false);
+        setDate(currentDate);
+    };
+
+    const showDatePicker = () => {
+        setShowPickerDate(true);
+    };
+
+    // time
+    const [time, setTime] = useState(new Date());
+    const [showPickerTime, setShowPickerTime] = useState(false);
+
+    const onChangeTime = (event, selectedTime) => {
+        const currentTime = selectedTime || time;
+        setShowPickerTime(false);
+        setTime(currentTime);
+    };
+
+    const showTimePicker = () => {
+        setShowPickerTime(true);
+    };
+
+    const getFormattedDate = (date) => {
+        return date.toLocaleDateString('en-GB'); // Format tanggal dd-mm-yyyy
+    };
+
+    const getFormattedTime = (time) => {
+        return time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }); // Format waktu HH:mm
+    };
+
+    const getForecast = () => {
+        axios.get(`https://backend-weather-on-your-schedule-production.up.railway.app/forecast/find-by-datetime?username=${username}&date=${getFormattedDate(date)}&time=${getFormattedTime(time)}`)
+            .then(response => {
+                console.log(response.data);
+                const data = response.data.data;
+
+                // Mengupdate state dengan data dari respons
+                setWeather(prevState => ({
+                    ...prevState,
+                    value: data.weather
+                }));
+
+                setHumidity(prevState => ({
+                    ...prevState,
+                    value: data.humidity
+                }));
+
+                setWindSpeed(prevState => ({
+                    ...prevState,
+                    value: parseFloat(data.wind_speed).toFixed(2)
+                }));
+
+                setTemperature(prevState => ({
+                    ...prevState,
+                    value: data.temperature
+                }));
+            })
+            .catch(error => {
+                console.error(error);
+
+                if (error.response) {
+                    // Respons diterima tetapi status tidak berhasil
+                    console.log(error.response.data.message);
+                    // Memunculkan pesan error yang diterima dari server
+                } else if (error.request) {
+                    // Respons tidak diterima
+                    console.log("Failed to receive response from the server.");
+                    // Memunculkan pesan kesalahan ketika tidak ada respons dari server
+                } else {
+                    // Kesalahan lainnya
+                    console.log("An error occurred during the request.");
+                    // Memunculkan pesan kesalahan ketika terjadi kesalahan lainnya
+                }
+            });
+    }
+
+    const weatherImageMapping = {
+        "Cerah": require("../assets/weather-icon/0-cerah.png"),
+        "Cerah Berawan": require("../assets/weather-icon/1-cerah-berawan.png"),
+        "Berawan": require("../assets/weather-icon/3-berawan.png"),
+        "Berawan Tebal": require("../assets/weather-icon/4-berawan-tebal.png"),
+        "Kabut": require("../assets/weather-icon/45-kabut.png"),
+        "Hujan Ringan": require("../assets/weather-icon/60-hujan-ringan.png"),
+        "Hujan Sedang": require("../assets/weather-icon/61-hujan-sedang.png"),
+        "Hujan Petir": require("../assets/weather-icon/95-hujan-petir.png"),
+    };
+
+    React.useEffect(() => {
+        if (date !== "" && time !== "") {
+            getForecast();
+        }
+    }, [date, time]);
 
     const handleSave = () => {
         console.log('Title:', title.value);
@@ -48,8 +151,8 @@ const CreateEventScreen = ({ navigation }) => {
                     style: { color: '#000', fontWeight: 'bold', fontSize: 18 },
                 }}
                 leftComponent={
-                    <TouchableOpacity onPress={() => navigation.replace('Home')}>
-                        <Text style={tw`text-blue-500 font-medium`}>Back</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Home', { username: username })}>
+                        <Image source={require('../assets/back-arrow.png')} style={tw`w-6 h-6`} />
                     </TouchableOpacity>
                 }
             />
@@ -71,41 +174,98 @@ const CreateEventScreen = ({ navigation }) => {
                     <View style={tw`flex-row justify-between mb-3`}>
                         {/* date */}
                         <View style={tw`flex-1 pr-2`}>
-                            <Text style={tw`text-gray-700 font-medium mb-2`}>{date.alias}</Text>
-                            <TextInput
+                            <Text style={tw`text-gray-700 font-medium mb-2`}>Date</Text>
+                            <TouchableOpacity
                                 style={tw`rounded-md border border-gray-400 p-2 w-full`}
-                                onChangeText={(text) => setDate({ value: text, alias: date.alias })}
-                                value={date.value}
-                                placeholder={date.alias}
-                            />
+                                onPress={showDatePicker}
+                            >
+                                <Text style={tw`text-black`}>{date ? date.toLocaleDateString() : 'Select Date'}</Text>
+                            </TouchableOpacity>
+
+                            <Modal visible={showPickerDate} transparent={true} animationType="slide">
+                                <View style={tw`flex-1 justify-end`}>
+                                    <TouchableOpacity
+                                        style={tw`bg-white p-4`}
+                                        onPress={() => setShowPickerDate(false)}
+                                    >
+                                        <DateTimePicker
+                                            value={date}
+                                            mode="date"
+                                            is24Hour={true}
+                                            display="default"
+                                            minimumDate={new Date()}
+                                            onChange={onChangeDate}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </Modal>
                         </View>
+
                         {/* time */}
-                        <View style={tw`flex-1 pl-2`}>
-                            <Text style={tw`text-gray-700 font-medium mb-2`}>{time.alias}</Text>
-                            <TextInput
+                        <View style={tw`flex-1 pr-2`}>
+                            <Text style={tw`text-gray-700 font-medium mb-2`}>Time</Text>
+                            <TouchableOpacity
                                 style={tw`rounded-md border border-gray-400 p-2 w-full`}
-                                onChangeText={(text) => setTime({ value: text, alias: time.alias })}
-                                value={time.value}
-                                placeholder={time.alias}
-                            />
+                                onPress={showTimePicker}
+                            >
+                                <Text style={tw`text-black`}>
+                                    {time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : 'Select Time'}
+                                </Text>
+                            </TouchableOpacity>
+
+                            <Modal visible={showPickerTime} transparent={true} animationType="slide">
+                                <View style={tw`flex-1 justify-end`}>
+                                    <TouchableOpacity
+                                        style={tw`bg-white p-4`}
+                                        onPress={() => setShowPickerTime(false)}
+                                    >
+                                        <DateTimePicker
+                                            value={time}
+                                            mode="time"
+                                            is24Hour={true}
+                                            display="default"
+                                            onChange={onChangeTime}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </Modal>
                         </View>
                     </View>
-                    {/* weatherForecast & chanceOfRaining */}
+                    {/* weather & humidity */}
                     <View style={tw`flex-row justify-between mb-3`}>
-                        {/* weatherForecast */}
+                        {/* weather */}
                         <View style={tw`flex-1 pr-2`}>
-                            <Text style={tw`text-gray-700 font-medium mb-2`}>{weatherForecast.alias}</Text>
+                            <Text style={tw`text-gray-700 font-medium mb-2`}>{weather.alias}</Text>
                             <View style={tw`flex-row items-center`}>
-                                <Image source={require('../assets/icon-sun.png')} style={tw`w-12 h-12`} />
-                                <Text style={tw`ml-2`}>30°</Text>
+                                <Image source={weatherImageMapping[weather.value]} style={tw`w-12 h-12`} />
+                                <Text style={tw`ml-2`}>{weather.value}</Text>
                             </View>
                         </View>
-                        {/* chanceOfRaining */}
+                        {/* humidity */}
                         <View style={tw`flex-1 pl-2`}>
-                            <Text style={tw`text-gray-700 font-medium mb-2`}>{chanceOfRaining.alias}</Text>
+                            <Text style={tw`text-gray-700 font-medium mb-2`}>{humidity.alias}</Text>
                             <View style={tw`flex-row items-center`}>
                                 <Image source={require('../assets/icon-drip.png')} style={tw`w-12 h-12`} />
-                                <Text style={tw`ml-2`}>40%</Text>
+                                <Text style={tw`ml-2`}>{humidity.value}%</Text>
+                            </View>
+                        </View>
+                    </View>
+                    {/* wind speed & temperature */}
+                    <View style={tw`flex-row justify-between mb-3`}>
+                        {/* temperature */}
+                        <View style={tw`flex-1 pl-2`}>
+                            <Text style={tw`text-gray-700 font-medium mb-2`}>{temperature.alias}</Text>
+                            <View style={tw`flex-row items-center`}>
+                                <Image source={require('../assets/icon-temperature.png')} style={tw`w-12 h-12`} />
+                                <Text style={tw`ml-2`}>{temperature.value}°C</Text>
+                            </View>
+                        </View>
+                        {/* wind speed */}
+                        <View style={tw`flex-1 pl-2`}>
+                            <Text style={tw`text-gray-700 font-medium mb-2`}>{windSpeed.alias}</Text>
+                            <View style={tw`flex-row items-center`}>
+                                <Image source={require('../assets/icon-wind.png')} style={tw`w-12 h-12`} />
+                                <Text style={tw`ml-2`}>{windSpeed.value} MPH</Text>
                             </View>
                         </View>
                     </View>
@@ -122,12 +282,12 @@ const CreateEventScreen = ({ navigation }) => {
                             textAlignVertical="top"
                         />
                     </View>
-                    {/* button */}
+                    {/* create button */}
                     <TouchableOpacity
                         style={tw`bg-orange-500 py-2 px-4 rounded`}
                         onPress={handleSave}
                     >
-                        <Text style={tw`text-center font-medium`}>Add Event</Text>
+                        <Text style={tw`text-center font-medium`}>Create Event</Text>
                     </TouchableOpacity>
                 </View>
             </View>
