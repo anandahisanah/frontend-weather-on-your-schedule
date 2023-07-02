@@ -89,7 +89,7 @@ const DetailScreen = ({ navigation, route }) => {
                     style: { color: '#000', fontWeight: 'bold', fontSize: 18 },
                 }}
                 leftComponent={
-                    <TouchableOpacity onPress={() => navigation.navigate('Home', { username: username })}>
+                    <TouchableOpacity onPress={() => navigation.replace('Home', { username: username })}>
                         <Image source={require('../assets/back-arrow.png')} style={tw`w-6 h-6`} />
                     </TouchableOpacity>
                 }
@@ -142,7 +142,7 @@ const DetailScreen = ({ navigation, route }) => {
                     <View style={tw`flex-1 items-center mb-5`}>
                         <TouchableOpacity
                             style={tw`w-full bg-gray-200 py-2 rounded`}
-                            onPress={() => navigation.navigate('UpdateEvent')}
+                            onPress={() => navigation.replace('UpdateEvent', { username: username, eventId: event.id, formattedDate: formattedDate })}
                         >
                             <Text style={tw`text-center font-medium`}>Update Event</Text>
                         </TouchableOpacity>

@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
     axios.get(`https://backend-weather-on-your-schedule-production.up.railway.app/user/login?username=${username.value}&password=${password.value}`)
       .then(response => {
         console.log(response);
-        navigation.navigate('Home', { username: username.value });
+        navigation.replace('Home', { username: username.value });
       })
       .catch(error => {
         console.error(error);

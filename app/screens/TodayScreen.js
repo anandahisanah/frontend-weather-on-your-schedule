@@ -1,19 +1,21 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, StatusBar } from 'react-native';
 import tw from 'twrnc';
 import { Header } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TodayScreen = ({ navigation }) => {
     const times = Array(6).fill(null);
 
     return (
-        <View style={tw`flex-1`}>
+        <SafeAreaView style={tw`flex-1`}>
             {/* header */}
             <Header
-                backgroundColor={'#fff'}
+             containerStyle={{ paddingTop: 0 }}
+                backgroundColor={'#FFF'}
                 centerComponent={{
                     text: 'Weather in Balikpapan',
-                    style: { color: '#000', fontWeight: 'bold', fontSize: 18 },
+                    style: [tw`mt-0`, { color: '#000', fontWeight: 'bold', fontSize: 18 }],
                 }}
                 leftComponent={
                     <TouchableOpacity onPress={() => navigation.replace('Home')}>
@@ -23,7 +25,7 @@ const TodayScreen = ({ navigation }) => {
             />
             <ScrollView>
                 {/* day */}
-                <View style={tw`flex-1 items-center bg-white pb-5`}>
+                <View style={tw`flex-1 items-center bg-white`}>
                     <View style={tw`w-full px-5`}>
                         <Text style={tw`font-medium text-base my-5 text-center`}>Monday, 24 Apr 2023</Text>
                         {/* time */}
@@ -67,7 +69,7 @@ const TodayScreen = ({ navigation }) => {
                     </View>
                 </View>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 };
 

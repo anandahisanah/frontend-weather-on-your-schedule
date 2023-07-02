@@ -88,7 +88,7 @@ const RegisterScreen = () => {
     axios.post('https://backend-weather-on-your-schedule-production.up.railway.app/user', userData)
       .then(response => {
         console.log(response);
-        navigation.navigate('Login', { province_name: selectedProvince, city_name: selectedCity });
+        navigation.replace('Login', { province_name: selectedProvince, city_name: selectedCity });
       })
       .catch(error => {
         console.error(error);

@@ -51,7 +51,7 @@ const EventScreen = ({ navigation, route }) => {
                     style: { color: '#000', fontWeight: 'bold', fontSize: 18 },
                 }}
                 leftComponent={
-                    <TouchableOpacity onPress={() => navigation.navigate('Home', { username: username })}>
+                    <TouchableOpacity onPress={() => navigation.replace('Home', { username: username })}>
                         <Image source={require('../assets/back-arrow.png')} style={tw`w-6 h-6`} />
                     </TouchableOpacity>
                 }
@@ -67,7 +67,7 @@ const EventScreen = ({ navigation, route }) => {
                             const formattedDate = formattedDateTime.format('DD MMM YYYY');
                             const formattedTime = formattedDateTime.format('HH:mm');
                             return (
-                                <TouchableOpacity onPress={() => navigation.navigate('Detail', { username: username, eventId: event.id })} key={index}>
+                                <TouchableOpacity onPress={() => navigation.replace('Detail', { username: username, eventId: event.id })} key={index}>
                                     <View style={tw`flex-row justify-center items-center my-3`}>
                                         <View style={tw`flex flex-col items-center`}>
                                             <Text style={tw`font-medium`}>{formattedDate}</Text>

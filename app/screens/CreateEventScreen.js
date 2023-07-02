@@ -45,6 +45,7 @@ const CreateEventScreen = ({ navigation, route }) => {
     const onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShowPickerDate(false);
+        console.log(currentDate)
         setDate(currentDate);
     };
 
@@ -162,7 +163,6 @@ const CreateEventScreen = ({ navigation, route }) => {
             title: title.value,
             description: description.value,
         };
-        console.log(data)
         axios.post('https://backend-weather-on-your-schedule-production.up.railway.app/event', data)
             .then(response => {
                 console.log(response.data);
@@ -197,7 +197,7 @@ const CreateEventScreen = ({ navigation, route }) => {
                     style: { color: '#000', fontWeight: 'bold', fontSize: 18 },
                 }}
                 leftComponent={
-                    <TouchableOpacity onPress={() => navigation.navigate('Home', { username: username })}>
+                    <TouchableOpacity onPress={() => navigation.replace('Home', { username: username })}>
                         <Image source={require('../assets/back-arrow.png')} style={tw`w-6 h-6`} />
                     </TouchableOpacity>
                 }

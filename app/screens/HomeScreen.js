@@ -79,7 +79,7 @@ function HomeScreen({ navigation, route }) {
                             <Text style={tw`text-lg font-semibold`}>Today</Text>
                         </View>
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('Today', { username: username })}
+                            onPress={() => navigation.replace('Today', { username: username })}
                         >
                             <Text style={tw`text-slate-500 underline`}>See More</Text>
                         </TouchableOpacity>
@@ -107,7 +107,7 @@ function HomeScreen({ navigation, route }) {
                         </View>
                         {events.length > 0 && (<View style={tw`flex-1 justify-center items-end`}>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('Event', { username: username })}
+                                onPress={() => navigation.replace('Event', { username: username })}
                             >
                                 <Text style={tw`text-slate-500 underline`}>See More</Text>
                             </TouchableOpacity>
@@ -126,7 +126,7 @@ function HomeScreen({ navigation, route }) {
                                 <TouchableOpacity
                                     style={tw`flex-row items-center px-5 mb-2`}
                                     key={index}
-                                    onPress={() => navigation.navigate('Detail', { username: username, eventId: event.id })}
+                                    onPress={() => navigation.replace('Detail', { username: username, eventId: event.id })}
                                 >
                                     <View style={tw`text-center items-center`}>
                                         <Text style={tw`font-medium`}>{formattedDate}</Text>
@@ -147,7 +147,7 @@ function HomeScreen({ navigation, route }) {
                 <View style={tw`flex-1 items-center mx-5`}>
                     <TouchableOpacity
                         style={tw`w-full bg-orange-500 py-2 rounded`}
-                        onPress={() => navigation.navigate('CreateEvent', { username: username })}
+                        onPress={() => navigation.replace('CreateEvent', { username: username })}
                     >
                         <Text style={tw`text-center font-medium`}>Create Event</Text>
                     </TouchableOpacity>
