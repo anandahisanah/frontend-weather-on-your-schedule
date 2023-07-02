@@ -136,19 +136,29 @@ const CreateEventScreen = ({ navigation, route }) => {
         }
     }, [date, time]);
 
-    const generateDateToSave = (date) => {
-        return date.toISOString().slice(0, 10); // Mengambil substring dari string ISO untuk mendapatkan format tanggal "yyyy-mm-dd"
+    const padZero = (number) => {
+        return number < 10 ? "0" + number : number;
     };
 
-    const generateTimeToSave = (time) => {
-        return time.toISOString().slice(11, 16); // Mengambil substring dari string ISO untuk mendapatkan format waktu "HH:mm"
-    };
-
-    // save
     const handleSave = () => {
+        const dateTime = date;
+        dateTime.setUTCHours(dateTime.getUTCHours());
+        const formattedDateTime =
+            dateTime.getFullYear() +
+            "-" +
+            padZero(dateTime.getMonth() + 1) +
+            "-" +
+            padZero(dateTime.getDate()) +
+            " " +
+            padZero(dateTime.getHours()) +
+            ":" +
+            padZero(dateTime.getMinutes()) +
+            ":" +
+            padZero(dateTime.getSeconds());
+
         const data = {
             user_username: username,
-            datetime: generateDateToSave(date) + ' ' + generateTimeToSave(time) + ':00',
+            datetime: formattedDateTime,
             title: title.value,
             description: description.value,
         };
