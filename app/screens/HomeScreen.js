@@ -79,7 +79,7 @@ function HomeScreen({ navigation, route }) {
                             <Text style={tw`text-lg font-semibold`}>Today</Text>
                         </View>
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('Today')}
+                            onPress={() => navigation.navigate('Today', { username: username })}
                         >
                             <Text style={tw`text-slate-500 underline`}>See More</Text>
                         </TouchableOpacity>
@@ -107,7 +107,7 @@ function HomeScreen({ navigation, route }) {
                         </View>
                         {events.length > 0 && (<View style={tw`flex-1 justify-center items-end`}>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('Event')}
+                                onPress={() => navigation.navigate('Event', { username: username })}
                             >
                                 <Text style={tw`text-slate-500 underline`}>See More</Text>
                             </TouchableOpacity>
