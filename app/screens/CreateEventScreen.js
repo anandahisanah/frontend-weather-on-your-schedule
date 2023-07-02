@@ -166,7 +166,7 @@ const CreateEventScreen = ({ navigation, route }) => {
         axios.post('https://backend-weather-on-your-schedule-production.up.railway.app/event', data)
             .then(response => {
                 console.log(response.data);
-                // navigation.navigate('Home', { username: username });
+                navigation.replace('Home', { username: username });
             })
             .catch(error => {
                 console.error(error);
@@ -295,7 +295,7 @@ const CreateEventScreen = ({ navigation, route }) => {
                             </View>
                         </View>
                     </View>
-                    {/* wind speed & temperature */}
+                    {/* temperature & wind speed */}
                     <View style={tw`flex-row justify-between mb-3`}>
                         {/* temperature */}
                         <View style={tw`flex-1 pl-2`}>
