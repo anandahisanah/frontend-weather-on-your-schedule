@@ -21,8 +21,10 @@ const DetailScreen = ({ navigation, route }) => {
             .get(`https://backend-weather-on-your-schedule-production.up.railway.app/event/${eventId}`)
             .then(response => {
                 console.log(response.data.data);
-                setEvent(response.data.data);
 
+                const dateString = response.data.data.datetime ? response.data.data.datetime.substring(0, 19) : null;
+                setEvent(response.data.data);
+                setDateString(dateString);
             })
             .catch(error => {
                 console.error(error);
@@ -34,10 +36,37 @@ const DetailScreen = ({ navigation, route }) => {
     }, []);
 
     // parse datetime
-    const dateString = event.datetime.substring(0, 19);
+    const [dateString, setDateString] = useState(null);
     const utcOffset = 8 * 60; // UTC+8
     const formattedDateTime = dayjs(dateString).add(utcOffset, 'minute');
     const formattedDate = formattedDateTime.format('ddd, DD MMM YYYY HH:mm');
+
+    // delete event
+    const deleteEvent = () => {
+        axios
+            .delete(`https://backend-weather-on-your-schedule-production.up.railway.app/event/${eventId}`)
+            .then(response => {
+                console.log(response.data.data);
+                navigation.replace('Home', { username: username })
+            })
+            .catch(error => {
+                console.error(error);
+
+                if (error.response) {
+                    // Respons diterima tetapi status tidak berhasil
+                    console.log(error.response.data.message);
+                    // Memunculkan pesan error yang diterima dari server
+                } else if (error.request) {
+                    // Respons tidak diterima
+                    console.log("Failed to receive response from the server.");
+                    // Memunculkan pesan kesalahan ketika tidak ada respons dari server
+                } else {
+                    // Kesalahan lainnya
+                    console.log("An error occurred during the request.");
+                    // Memunculkan pesan kesalahan ketika terjadi kesalahan lainnya
+                }
+            });
+    };
 
     const weatherImageMapping = {
         "Cerah": require("../assets/weather-icon/0-cerah.png"),
@@ -54,7 +83,7 @@ const DetailScreen = ({ navigation, route }) => {
         <View style={tw`flex-1`}>
             {/* header */}
             <Header
-                backgroundColor={'#fff'}
+                backgroundColor={'#ed8936'}
                 centerComponent={{
                     text: 'Detail Event',
                     style: { color: '#000', fontWeight: 'bold', fontSize: 18 },
@@ -110,12 +139,21 @@ const DetailScreen = ({ navigation, route }) => {
                         {event.description}
                     </Text>
                     {/* update event */}
-                    <View style={tw`flex-1 items-center`}>
+                    <View style={tw`flex-1 items-center mb-5`}>
                         <TouchableOpacity
-                            style={tw`w-full bg-orange-500 py-2 rounded`}
+                            style={tw`w-full bg-gray-200 py-2 rounded`}
                             onPress={() => navigation.navigate('UpdateEvent')}
                         >
                             <Text style={tw`text-center font-medium`}>Update Event</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/* delete event */}
+                    <View style={tw`flex-1 items-center mb-5`}>
+                        <TouchableOpacity
+                            style={tw`w-full bg-red-500 py-2 rounded`}
+                            onPress={deleteEvent}
+                        >
+                            <Text style={tw`text-center text-white font-medium`}>Delete Event</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
