@@ -4,8 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'twrnc';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import 'dayjs/locale/en'; // Import locale jika diperlukan
-import utc from 'dayjs/plugin/utc'; // Import plugin utc jika diperlukan
+import 'dayjs/locale/en';
+import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
@@ -126,7 +126,7 @@ function HomeScreen({ navigation, route }) {
                                 <TouchableOpacity
                                     style={tw`flex-row items-center px-5 mb-2`}
                                     key={index}
-                                    onPress={() => navigation.navigate('Detail', { username: username, event_id: event.id })}
+                                    onPress={() => navigation.navigate('Detail', { username: username, eventId: event.id })}
                                 >
                                     <View style={tw`text-center items-center`}>
                                         <Text style={tw`font-medium`}>{formattedDate}</Text>
