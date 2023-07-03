@@ -5,7 +5,7 @@ import tw from 'twrnc';
 const SplashScreen = ({ navigation }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
-            navigation.replace('Home');
+            navigation.replace('Register');
         }, 3000);
         return () => clearTimeout(timer);
     }, []);
