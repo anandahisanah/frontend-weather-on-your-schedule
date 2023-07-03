@@ -25,13 +25,10 @@ function HomeScreen({ navigation, route }) {
         axios
             .get(`https://backend-weather-on-your-schedule-production.up.railway.app/forecast/now-by-city?user_username=${username}`)
             .then(response => {
-                // console.log(response.data.data)
                 setForecastNow(response.data.data);
 
-                // console.log(response.data.data.datetime)
                 const dateString = response.data.data.datetime ? response.data.data.datetime.substring(0, 19) : null;
                 setDateString(dateString);
-                // console.log(dateString)
             })
             .catch(error => {
                 console.error(error);
@@ -50,9 +47,7 @@ function HomeScreen({ navigation, route }) {
         axios
             .get(`https://backend-weather-on-your-schedule-production.up.railway.app/forecast/get?user_username=${username}`)
             .then(response => {
-                console.log(response.data.data);
                 setForecasts(response.data.data);
-
             })
             .catch(error => {
                 console.error(error);
@@ -71,8 +66,12 @@ function HomeScreen({ navigation, route }) {
         axios
             .get(`https://backend-weather-on-your-schedule-production.up.railway.app/events?userUsername=${username}`)
             .then(response => {
-                setEvents(response.data.data);
-
+                if (response.data.data) {
+                    setEvents(response.data.data);
+                } else {
+                    setEvents([]);
+                }
+                console.log(response.data.data)
             })
             .catch(error => {
                 console.error(error);
@@ -145,6 +144,7 @@ function HomeScreen({ navigation, route }) {
                     </View>
                     <View style={tw`flex-row`}>
                         {forecasts.map((forecast, index) => {
+                            console.log(events)
                             // parse date and time
                             const dateString = forecast.datetime.substring(0, 19);
                             const utcOffset = 8 * 60; // Offset waktu UTC+8 dalam menit (8 jam)
@@ -165,7 +165,6 @@ function HomeScreen({ navigation, route }) {
                                 </View>
                             );
                         })}
-
                     </View>
                 </View>
 
