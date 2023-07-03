@@ -20,8 +20,6 @@ const DetailScreen = ({ navigation, route }) => {
         axios
             .get(`https://backend-weather-on-your-schedule-production.up.railway.app/event/${eventId}`)
             .then(response => {
-                console.log(response.data.data);
-
                 const dateString = response.data.data.datetime ? response.data.data.datetime.substring(0, 19) : null;
                 setEvent(response.data.data);
                 setDateString(dateString);
@@ -46,7 +44,6 @@ const DetailScreen = ({ navigation, route }) => {
         axios
             .delete(`https://backend-weather-on-your-schedule-production.up.railway.app/event/${eventId}`)
             .then(response => {
-                console.log(response.data.data);
                 navigation.replace('Home', { username: username })
             })
             .catch(error => {

@@ -45,7 +45,6 @@ const CreateEventScreen = ({ navigation, route }) => {
     const onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShowPickerDate(false);
-        console.log(currentDate)
         setDate(currentDate);
     };
 
@@ -165,7 +164,6 @@ const CreateEventScreen = ({ navigation, route }) => {
         };
         axios.post('https://backend-weather-on-your-schedule-production.up.railway.app/event', data)
             .then(response => {
-                console.log(response.data);
                 navigation.replace('Home', { username: username });
             })
             .catch(error => {

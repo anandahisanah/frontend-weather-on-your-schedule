@@ -104,10 +104,8 @@ const UpdateEventScreen = ({ navigation, route }) => {
             title: title.value,
             description: description.value,
         };
-        console.log(data)
         axios.post(`https://backend-weather-on-your-schedule-production.up.railway.app/event/${event.id}`, data)
             .then(response => {
-                console.log(response.data);
                 navigation.replace('Event', { username: username });
             })
             .catch(error => {

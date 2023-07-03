@@ -60,7 +60,6 @@ const RegisterScreen = () => {
   };
 
   React.useEffect(() => {
-    console.log(selectedProvince)
     if (selectedProvince !== "") {
       getCities(selectedProvince);
     }
@@ -87,7 +86,6 @@ const RegisterScreen = () => {
     };
     axios.post('https://backend-weather-on-your-schedule-production.up.railway.app/user', userData)
       .then(response => {
-        console.log(response);
         navigation.replace('Login', { province_name: selectedProvince, city_name: selectedCity });
       })
       .catch(error => {

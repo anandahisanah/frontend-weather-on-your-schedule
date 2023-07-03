@@ -17,7 +17,6 @@ const EventScreen = ({ navigation, route }) => {
         axios
             .get(`https://backend-weather-on-your-schedule-production.up.railway.app/events?userUsername=${username}&?limit=all`)
             .then(response => {
-                console.log(response.data.data);
                 setEvents(response.data.data);
 
             })

@@ -20,7 +20,6 @@ const TodayScreen = ({ navigation, route }) => {
         axios
             .get(`https://backend-weather-on-your-schedule-production.up.railway.app/forecast/get?user_username=${username}&limit=all`)
             .then(response => {
-                console.log(response.data.data);
                 setForecasts(response.data.data);
 
             })
