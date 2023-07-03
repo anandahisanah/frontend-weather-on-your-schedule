@@ -12,8 +12,6 @@ dayjs.extend(utc);
 function HomeScreen({ navigation, route }) {
     const { username } = route.params;
 
-    const todayWeathers = Array(6).fill(null);
-
     // parse datetime
     const [dateString, setDateString] = useState(null);
     const utcOffset = 8 * 60; // UTC+8
@@ -140,7 +138,7 @@ function HomeScreen({ navigation, route }) {
                             <Text style={tw`text-lg font-semibold`}>Weather</Text>
                         </View>
                         <TouchableOpacity
-                            onPress={() => navigation.replace('Today', { username: username })}
+                            onPress={() => navigation.replace('Today', { username: username, city_name: forecastNow.city_name })}
                         >
                             <Text style={tw`text-slate-500 underline`}>See More</Text>
                         </TouchableOpacity>
@@ -156,7 +154,7 @@ function HomeScreen({ navigation, route }) {
 
                             return (
                                 <View style={tw`flex-1 items-center mx-2`} key={index}>
-                                    <Text style={tw`font-medium text-slate-500`}>{formattedDate}</Text>
+                                    <Text style={tw`text-xs font-medium text-slate-500`}>{formattedDate}</Text>
                                     <Text style={tw`font-medium text-slate-500`}>{formattedTime}</Text>
                                     <Image source={weatherImageMapping[forecast.weather]} style={tw`w-12 h-12`} />
                                     <Text style={tw`font-medium text-base text-xl`}>{forecast.temperature}°</Text>
