@@ -115,7 +115,7 @@ function HomeScreen({ navigation, route }) {
                         imageStyle={{ opacity: 0.5 }}
                     >
                         <View style={tw`items-center`}>
-                            <Text style={tw`mb-2 font-medium text-base`}>Today {formattedTime}</Text>
+                            <Text style={tw`mb-2 font-medium text-base`}>{formattedTime}</Text>
                             <Text style={tw`mb-2 font-medium text-lg`}>{forecastNow.city_name}</Text>
                             <Text style={tw`mb-2 font-medium text-6xl`}>{forecastNow.temperature}°</Text>
                             <View style={tw`flex-row items-center`}>
