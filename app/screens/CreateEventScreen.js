@@ -141,8 +141,8 @@ const CreateEventScreen = ({ navigation, route }) => {
     };
 
     const handleSave = () => {
-        const dateTime = date;
-        dateTime.setUTCHours(dateTime.getUTCHours());
+        const dateTime = new Date(date);
+        dateTime.setHours(time.getHours(), time.getMinutes(), 0, 0);
         const formattedDateTime =
             dateTime.getFullYear() +
             "-" +
@@ -153,8 +153,7 @@ const CreateEventScreen = ({ navigation, route }) => {
             padZero(dateTime.getHours()) +
             ":" +
             padZero(dateTime.getMinutes()) +
-            ":" +
-            padZero(dateTime.getSeconds());
+            ":00";
 
         const data = {
             user_username: username,
